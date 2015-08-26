@@ -33,6 +33,7 @@ static UIImage *SVProgressHUDErrorImage;
 static SVProgressHUDMaskType SVProgressHUDDefaultMaskType;
 static UIView *SVProgressHUDExtensionView;
 static BOOL SVProgressHUDFollowKeyboardAnimation;
+static BOOL SVProgressHUDDismissHUDOnTouchDownInside;
 
 static const CGFloat SVProgressHUDRingRadius = 18;
 static const CGFloat SVProgressHUDRingNoTextRadius = 24;
@@ -139,6 +140,11 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
 + (void)setFollowKeyboardAnimation:(BOOL)followKeyboardAnim {
     [self sharedView];
     SVProgressHUDFollowKeyboardAnimation = followKeyboardAnim;
+}
+
++ (void)setDismissHUDOnTouchDownInside:(BOOL)dismissHUDOnTouch {
+    [self sharedView];
+    SVProgressHUDDismissHUDOnTouchDownInside = dismissHUDOnTouch;
 }
 
 #pragma mark - Show Methods
@@ -267,6 +273,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
             SVProgressHUDForegroundColor = [UIColor whiteColor];
         }
         SVProgressHUDFollowKeyboardAnimation = YES;
+        SVProgressHUDDismissHUDOnTouchDownInside = NO;
         
         NSBundle *bundle = [NSBundle bundleForClass:self.class];
         NSURL *url = [bundle URLForResource:@"SVProgressHUD" withExtension:@"bundle"];
@@ -587,6 +594,9 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
     
     if (CGRectContainsPoint(self.hudView.frame, touchLocation)) {
         [[NSNotificationCenter defaultCenter] postNotificationName:SVProgressHUDDidTouchDownInsideNotification object:event];
+        if (SVProgressHUDDismissHUDOnTouchDownInside) {
+            [self dismiss];
+        }
     }
 }
 
