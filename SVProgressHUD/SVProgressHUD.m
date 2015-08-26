@@ -32,6 +32,7 @@ static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
 static SVProgressHUDMaskType SVProgressHUDDefaultMaskType;
 static UIView *SVProgressHUDExtensionView;
+static BOOL SVProgressHUDFollowKeyboardAnimation;
 
 static const CGFloat SVProgressHUDRingRadius = 18;
 static const CGFloat SVProgressHUDRingNoTextRadius = 24;
@@ -135,6 +136,10 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
     SVProgressHUDExtensionView = view;
 }
 
++ (void)setFollowKeyboardAnimation:(BOOL)followKeyboardAnim {
+    [self sharedView];
+    SVProgressHUDFollowKeyboardAnimation = followKeyboardAnim;
+}
 
 #pragma mark - Show Methods
 
@@ -261,6 +266,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
             SVProgressHUDBackgroundColor = [UIColor colorWithWhite:0.0f alpha:0.8f];
             SVProgressHUDForegroundColor = [UIColor whiteColor];
         }
+        SVProgressHUDFollowKeyboardAnimation = YES;
         
         NSBundle *bundle = [NSBundle bundleForClass:self.class];
         NSURL *url = [bundle URLForResource:@"SVProgressHUD" withExtension:@"bundle"];
@@ -485,7 +491,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
     }
 #endif
     
-    if(notification) {
+    if(notification && SVProgressHUDFollowKeyboardAnimation) {
         NSDictionary* keyboardInfo = [notification userInfo];
         CGRect keyboardFrame = [[keyboardInfo valueForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         animationDuration = [[keyboardInfo valueForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -956,6 +962,10 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
 
 
 - (CGFloat)visibleKeyboardHeight {
+    if (!SVProgressHUDFollowKeyboardAnimation) {
+        return 0.f;
+    }
+    
 #if !defined(SV_APP_EXTENSIONS)
     UIWindow *keyboardWindow = nil;
     for (UIWindow *testWindow in [[UIApplication sharedApplication] windows]) {

@@ -29,15 +29,16 @@ typedef NS_ENUM(NSUInteger, SVProgressHUDMaskType) {
 
 #pragma mark - Customization
 
-+ (void)setBackgroundColor:(UIColor*)color;                 // default is [UIColor whiteColor]
-+ (void)setForegroundColor:(UIColor*)color;                 // default is [UIColor blackColor]
-+ (void)setRingThickness:(CGFloat)width;                    // default is 4 pt
-+ (void)setFont:(UIFont*)font;                              // default is [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
-+ (void)setInfoImage:(UIImage*)image;                       // default is the bundled info image provided by Freepik
-+ (void)setSuccessImage:(UIImage*)image;                    // default is the bundled success image provided by Freepik
-+ (void)setErrorImage:(UIImage*)image;                      // default is the bundled error image provided by Freepik
-+ (void)setDefaultMaskType:(SVProgressHUDMaskType)maskType; // default is SVProgressHUDMaskTypeNone
-+ (void)setViewForExtension:(UIView*)view;                  // default is nil, only used if #define SV_APP_EXTENSIONS is set
++ (void)setBackgroundColor:(UIColor*)color;                  // default is [UIColor whiteColor]
++ (void)setForegroundColor:(UIColor*)color;                  // default is [UIColor blackColor]
++ (void)setRingThickness:(CGFloat)width;                     // default is 4 pt
++ (void)setFont:(UIFont*)font;                               // default is [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
++ (void)setInfoImage:(UIImage*)image;                        // default is the bundled info image provided by Freepik
++ (void)setSuccessImage:(UIImage*)image;                     // default is the bundled success image provided by Freepik
++ (void)setErrorImage:(UIImage*)image;                       // default is the bundled error image provided by Freepik
++ (void)setDefaultMaskType:(SVProgressHUDMaskType)maskType;  // default is SVProgressHUDMaskTypeNone
++ (void)setViewForExtension:(UIView*)view;                   // default is nil, only used if #define SV_APP_EXTENSIONS is set
++ (void)setFollowKeyboardAnimation:(BOOL)followKeyboardAnim; // default is YES
 
 #pragma mark - Show Methods
 
