@@ -31,6 +31,7 @@ static UIImage *SVProgressHUDInfoImage;
 static UIImage *SVProgressHUDSuccessImage;
 static UIImage *SVProgressHUDErrorImage;
 static UIView *SVProgressHUDExtensionView;
+static BOOL SVProgressHUDFollowKeyboardAnim;
 
 static const CGFloat SVProgressHUDRingRadius = 18;
 static const CGFloat SVProgressHUDRingNoTextRadius = 24;
@@ -140,6 +141,11 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
     SVProgressHUDExtensionView = view;
 }
 
++ (void)setFollowKeyboardAnimation:(BOOL)followKeyboardAnim {
+    [self sharedView];
+    SVProgressHUDFollowKeyboardAnim = followKeyboardAnim;
+}
+
 #pragma mark - Show Methods
 
 + (void)show {
@@ -223,6 +229,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
         
         SVProgressHUDDefaultMaskType = SVProgressHUDMaskTypeNone;
         SVProgressHUDDefaultStyle = SVProgressHUDStyleLight;
+        SVProgressHUDFollowKeyboardAnim = YES;
 
         // add accessibility support
         self.accessibilityIdentifier = @"SVProgressHUD";
@@ -507,7 +514,7 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
 #endif
     
     // Get keyboardHeight in regards to current state
-    if(notification) {
+    if(notification && SVProgressHUDFollowKeyboardAnim) {
         NSDictionary* keyboardInfo = [notification userInfo];
         CGRect keyboardFrame = [keyboardInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
         animationDuration = [keyboardInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
@@ -1002,6 +1009,10 @@ static const CGFloat SVProgressHUDUndefinedProgress = -1;
 }
 
 - (CGFloat)visibleKeyboardHeight {
+    if (!SVProgressHUDFollowKeyboardAnim) {
+        return 0;
+    }
+    
 #if !defined(SV_APP_EXTENSIONS)
     UIWindow *keyboardWindow = nil;
     for (UIWindow *testWindow in [[UIApplication sharedApplication] windows]) {
